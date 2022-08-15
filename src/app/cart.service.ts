@@ -6,15 +6,32 @@ import { Product } from './products';
 })
 export class CartService {
   items: Product[] = [];
-  constructor(
-    private http: HttpClient
-  ) { }
+  baseUrl =
+    'https://raw.githubusercontent.com/CatRaiden/forHelloWorld/master/178eats.json';
+  constructor(private http: HttpClient) {}
 
   getShippingPrices() {
-    return this.http.get<{type: string, price: number}[]>('/assets/shipping.json');
+    return this.http.get<{ type: string; price: number }[]>(
+      '/assets/shipping.json'
+    );
+  }
+
+  getProducts() {
+    interface Store {
+      data: Array<any>;
+      nulltest: null;
+    }
+    console.log('store');
+    this.http.get<Store>(this.baseUrl).subscribe((res) => {
+      console.log(res);
+      console.log(JSON.stringify(res));
+      console.log(JSON.parse(JSON.stringify(res)));
+      console.log(res.data);
+    });
   }
 
   addToCart(product: Product) {
+    console.log('add');
     this.items.push(product);
   }
 
